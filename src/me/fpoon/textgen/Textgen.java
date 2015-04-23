@@ -9,27 +9,28 @@
  */
 package me.fpoon.textgen;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import javax.swing.JFrame;
 import me.fpoon.textgen.bot.Bot;
+import me.fpoon.textgen.gui.MainForm;
 
 /**
  *
  * @author mariusz
  */
 public class Textgen {
-
+    
+    public static Bot bot;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Bot bot = new Bot(2);
-        try {
-            bot.analyze("test/pantadeusz.txt");
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-        
-        System.out.println(bot.generate(100));
+        bot = new Bot(2);
+        JFrame mainWnd = (JFrame)new MainForm();
+        mainWnd.setVisible(true);
     }
     
 }

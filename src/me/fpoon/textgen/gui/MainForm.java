@@ -9,6 +9,10 @@
  */
 package me.fpoon.textgen.gui;
 
+import com.sun.glass.events.KeyEvent;
+import java.awt.event.InputEvent;
+import me.fpoon.textgen.Textgen;
+
 /**
  *
  * @author mariusz
@@ -33,9 +37,10 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        panel1 = new java.awt.Panel();
-        jButton1 = new javax.swing.JButton();
+        taMessage = new javax.swing.JTextArea();
+        btSend = new javax.swing.JButton();
+        scrollPaneChat = new javax.swing.JScrollPane();
+        chatPanel = new me.fpoon.textgen.gui.components.ChatPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmTalk = new javax.swing.JMenu();
         jmiNewConversation = new javax.swing.JMenuItem();
@@ -50,6 +55,16 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                formComponentResized(evt);
+            }
+        });
+        addWindowStateListener(new java.awt.event.WindowStateListener() {
+            public void windowStateChanged(java.awt.event.WindowEvent evt) {
+                formWindowStateChanged(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -58,44 +73,44 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane1.setBorder(null);
         jScrollPane1.setAutoscrolls(true);
         jScrollPane1.setHorizontalScrollBar(null);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(220, 64));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(null);
-        jScrollPane1.setViewportView(jTextArea1);
+        taMessage.setColumns(20);
+        taMessage.setLineWrap(true);
+        taMessage.setRows(50);
+        taMessage.setBorder(null);
+        taMessage.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                taMessageKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(taMessage);
 
-        panel1.setPreferredSize(new java.awt.Dimension(64, 64));
-
-        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
-        panel1.setLayout(panel1Layout);
-        panel1Layout.setHorizontalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 64, Short.MAX_VALUE)
-        );
-        panel1Layout.setVerticalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 64, Short.MAX_VALUE)
-        );
+        btSend.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
+        btSend.setText("➜");
+        btSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSendActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btSend, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        chatPanel.setAutoscrolls(true);
+        scrollPaneChat.setViewportView(chatPanel);
 
         jmTalk.setText("Talk");
 
@@ -140,16 +155,51 @@ public class MainForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(scrollPaneChat)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 317, Short.MAX_VALUE)
+                .addComponent(scrollPaneChat, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSendActionPerformed
+        String rsp, msg = taMessage.getText();
+        if (msg.trim().length() == 0) {
+            taMessage.setText("");
+            taMessage.requestFocus();
+            return;
+        }
+        chatPanel.addMessage(msg, null);
+        Textgen.bot.analyze(msg);
+        rsp = Textgen.bot.generate(10);
+        taMessage.setText("");
+        chatPanel.addMessage(rsp, Textgen.bot);
+        taMessage.requestFocus();
+    }//GEN-LAST:event_btSendActionPerformed
+
+    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
+        //chatPanel.refresh();
+    }//GEN-LAST:event_formComponentResized
+
+    private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
+        //chatPanel.refresh();
+    }//GEN-LAST:event_formWindowStateChanged
+
+    private void taMessageKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taMessageKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if ((evt.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
+                taMessage.setText(taMessage.getText()+"\n");
+                return;
+            }
+            btSendActionPerformed(null);
+        }
+    }//GEN-LAST:event_taMessageKeyReleased
 
     /**
      * @param args the command line arguments
@@ -187,7 +237,8 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btSend;
+    private me.fpoon.textgen.gui.components.ChatPanel chatPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -199,10 +250,10 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu jmTalk;
     private javax.swing.JMenuItem jmiNewConversation;
     private javax.swing.JMenuItem jmiQuit;
-    private java.awt.Panel panel1;
+    private javax.swing.JScrollPane scrollPaneChat;
+    private javax.swing.JTextArea taMessage;
     // End of variables declaration//GEN-END:variables
 }

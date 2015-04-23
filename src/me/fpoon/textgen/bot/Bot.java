@@ -33,24 +33,31 @@ public class Bot {
     }
     
     /**
-     * Analizuje tekst trenigowy z ustawionym domyślnym kodowanie znaków
+     * Analizuje tekst trenigowy z ustawionym domyślnie kodowaniem znaków
      * @param path         Ścieżka dostępu do tekstu treningowego
      * @throws IOException Jeśli nie można otworzyć pliku
      */    
-    public void analyze(String path) throws IOException {
-        analyze(path, Charset.defaultCharset());
+    public void analyzeFile(String path) throws IOException {
+        analyzeFile(path, Charset.defaultCharset());
     }
     
     /**
-     * Analizuje tekst trenigowy
+     * Analizuje tekst trenigowy z pliku
      * @param path         Ścieżka dostępu do tekstu treningowego
      * @param encoding     Kodowanie pliku
      * @throws IOException Jeśli nie można otworzyć pliku
      */
-    public void analyze(String path, Charset encoding) throws IOException {
+    public void analyzeFile(String path, Charset encoding) throws IOException {
+        analyze(new String(Files.readAllBytes(Paths.get(path)), encoding));
+    }
+    
+    /**
+     * Analizuje podany łańcuch znaków
+     * @param text Łańcuch do analizy
+     */
+    public void analyze(String text) {
         Ngram[] ngs = new Ngram[length];
         int[]   foo = new int[length];
-        String text = new String(Files.readAllBytes(Paths.get(path)), encoding);
         String[] parts = text.split("\\s");
         int i = 0, a = 0;
         for (String str : parts) {
@@ -98,6 +105,7 @@ public class Bot {
             suffix = ngram.getSuffix(rand.nextFloat());
             ret += suffix + " ";
             ngram = nextNgram(ngram, suffix);
+            System.out.println(ngram);
         }
         return ret;
     }
@@ -115,8 +123,9 @@ public class Bot {
      * @param ngram Ngram do dodania
      */
     public void add(Ngram ngram) {
-        if (ngrams.contains(ngram)) {
-            Ngram ng = ngrams.get(ngrams.indexOf(ngram));
+        int index = ngrams.indexOf(ngram);
+        if (index >= 0) {
+            Ngram ng = ngrams.get(index);
             ng.incrementInstances();
             ng.add(ngram.suffixes.get(0).word);
         }
@@ -125,16 +134,16 @@ public class Bot {
     }
     
     /**
-     * Znajduje kolejny n-gram wykorzystując n-2 ostatnich prefiksów ngramu i podany sufiks
-     * @param ngram Ngram, z którego n-2 ostatnich prefiksów tworzy wyszukiwanie
+     * Znajduje kolejny n-gram wykorzystując prefiksy ngramu (oprócz pierwszego) i podany sufiks
+     * @param ngram  Ngram, z którego lista prefiksów posłuży do poszukiwania kolejnego ngramu
      * @param suffix Sufiks, który będzie ostatnim prefiksem szukanego Ngramu
-     * @return 
+     * @return       Znaleziony n-gram lub null jeśli ngramu brak
      */
     Ngram nextNgram(Ngram ngram, String suffix) {
         Ngram foo = new Ngram(this.length);
         int index;
         
-        for (int i = 2; i < ngram.prefixes.size(); i++) {
+        for (int i = 1; i < ngram.prefixes.size(); i++) {
             foo.add(ngram.prefixes.get(i));
         }
         foo.add(suffix);
@@ -142,5 +151,15 @@ public class Bot {
         index = ngrams.indexOf(foo);
         if (index < 0) return null;
         return ngrams.get(index);
+    }
+    
+    @Override
+    public String toString() {
+        String ret = "Zbiór słów bota\n";
+        ret += words.toString();
+        ret += "\nZbiór ngramów:\n";
+        ret += ngrams.toString();
+        
+        return ret;
     }
 }
