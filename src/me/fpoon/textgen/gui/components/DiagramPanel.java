@@ -10,6 +10,7 @@
 package me.fpoon.textgen.gui.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -97,10 +98,17 @@ public class DiagramPanel extends JPanel {
         if (parent != null)
             parent.resizeChildren();
         
+        width = bubble.getX()+bubble.getWidth();
+        width = getWidth() > width ? getWidth() : width;
+        height = bubble.getY()+bubble.getHeight();
+        height = getHeight() > width ? getHeight() : height;
+        this.setPreferredSize(new Dimension(width, height));
+        
         return bubble;
     }
     
     public void displayOutput(String output, Bot bot) {
+        if (output == null) return;
         removeAll();
         arrows.clear();
         String [] words = output.split(" ");
@@ -112,7 +120,7 @@ public class DiagramPanel extends JPanel {
                 parent.activate(true);
         }
         do {
-            System.out.println(Arrays.toString(words));
+            //System.out.println(Arrays.toString(words));
 
             for (Word suf : seed.getSuffixes()) {
                 String extra = String.format("%.1f%%", ((float)suf.instances/(float)seed.getInstances())*100);
@@ -121,8 +129,8 @@ public class DiagramPanel extends JPanel {
             parent = parent.get(words[bot.getLength()-1]);
             parent.activate(true);
             
-            words = Arrays.copyOfRange(words, bot.getLength() - 1, words.length);
-            System.out.println("Mod: "+ Arrays.toString(words));
+            words = Arrays.copyOfRange(words, 1, words.length);
+            //System.out.println("Mod: "+ Arrays.toString(words));
             seed = bot.getNgram(words);
         } while (words.length != bot.getLength()-1);
         

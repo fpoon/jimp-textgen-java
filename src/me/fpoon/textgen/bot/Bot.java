@@ -149,6 +149,7 @@ public class Bot {
         }
         int index = ngrams.indexOf(foo);
         if (index < 0) return null;
+        System.out.println(ngrams.get(index));
         return ngrams.get(index);
     }
     

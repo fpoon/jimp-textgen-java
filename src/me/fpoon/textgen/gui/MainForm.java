@@ -11,6 +11,8 @@ package me.fpoon.textgen.gui;
 
 import com.sun.glass.events.KeyEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import me.fpoon.textgen.Textgen;
 
 /**
@@ -47,6 +49,9 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jmiQuit = new javax.swing.JMenuItem();
+        viewMenu = new javax.swing.JMenu();
+        showDiagram = new javax.swing.JMenuItem();
+        showBotStats = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -129,6 +134,21 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuBar1.add(jmTalk);
 
+        viewMenu.setText("View");
+
+        showDiagram.setText("Show Transition Diagram");
+        showDiagram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showDiagramActionPerformed(evt);
+            }
+        });
+        viewMenu.add(showDiagram);
+
+        showBotStats.setText("Show Bot Statistics");
+        viewMenu.add(showBotStats);
+
+        jMenuBar1.add(viewMenu);
+
         jMenu2.setText("Bot");
 
         jMenuItem1.setText("Load Bot...");
@@ -179,9 +199,13 @@ public class MainForm extends javax.swing.JFrame {
         chatPanel.addMessage(msg, null);
         Textgen.bot.analyze(msg);
         rsp = Textgen.bot.generate(10);
-        if (rsp.length() == 0)
+        if (rsp.length() == 0) {
             rsp = "...";
-        Textgen.visualWnd.diagramPanel.displayOutput(rsp, Textgen.bot);
+            lastRsp = null;
+        } else
+            lastRsp = rsp;
+        if (diagram != null)
+            diagram.diagramPanel.displayOutput(rsp, Textgen.bot);
         taMessage.setText("");
         chatPanel.addMessage(rsp, Textgen.bot);
         taMessage.requestFocus();
@@ -204,6 +228,18 @@ public class MainForm extends javax.swing.JFrame {
             btSendActionPerformed(null);
         }
     }//GEN-LAST:event_taMessageKeyReleased
+
+    private void showDiagramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDiagramActionPerformed
+        if (diagram == null || !diagram.isDisplayable()) {
+            diagram = new DiagramFrame();
+            diagram.setVisible(true);
+            diagram.diagramPanel.displayOutput(lastRsp, Textgen.bot);
+        } else {
+            //diagram.dispatchEvent(new WindowEvent(diagram, WindowEvent.WINDOW_CLOSING));
+            diagram.dispose();
+            diagram = null;
+        }
+    }//GEN-LAST:event_showDiagramActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,6 +294,12 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiNewConversation;
     private javax.swing.JMenuItem jmiQuit;
     private javax.swing.JScrollPane scrollPaneChat;
+    private javax.swing.JMenuItem showBotStats;
+    private javax.swing.JMenuItem showDiagram;
     private javax.swing.JTextArea taMessage;
+    private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
+    private DiagramFrame diagram;
+    private String lastRsp;
+
 }

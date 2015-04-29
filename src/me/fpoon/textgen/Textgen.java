@@ -16,7 +16,7 @@ import java.io.Reader;
 import javax.swing.JFrame;
 import me.fpoon.textgen.bot.Bot;
 import me.fpoon.textgen.gui.MainForm;
-import me.fpoon.textgen.gui.VisualFrame;
+import me.fpoon.textgen.gui.DiagramFrame;
 
 /**
  *
@@ -25,7 +25,7 @@ import me.fpoon.textgen.gui.VisualFrame;
 public class Textgen {
     
     public static Bot bot;
-    public static VisualFrame visualWnd;
+    public static DiagramFrame visualWnd;
     /**
      * @param args the command line arguments
      */
@@ -33,8 +33,8 @@ public class Textgen {
         bot = new Bot(2);
         JFrame mainWnd = (JFrame)new MainForm();
         mainWnd.setVisible(true);
-        visualWnd = new VisualFrame();
-        visualWnd.setVisible(true);
+        /*visualWnd = new DiagramFrame();
+        visualWnd.setVisible(true);*/
     }
     
 }
