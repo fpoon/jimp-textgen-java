@@ -88,6 +88,7 @@ public class Bot {
                 System.out.println("Przeanalizowano "+i+" słów");
         }
         
+        System.out.println("Zakończono analizę. Wczytano "+i+" słów.");
         /*for (Ngram n : ngrams)
             System.out.println(n);*/
     }

@@ -12,6 +12,8 @@ package me.fpoon.textgen.gui;
 import com.sun.glass.events.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import me.fpoon.textgen.Textgen;
 
@@ -55,7 +57,8 @@ public class MainForm extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        loadTrainingText = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -156,9 +159,15 @@ public class MainForm extends javax.swing.JFrame {
 
         jMenuItem2.setText("New Bot...");
         jMenu2.add(jMenuItem2);
+        jMenu2.add(jSeparator2);
 
-        jMenuItem4.setText("Bot Settings");
-        jMenu2.add(jMenuItem4);
+        loadTrainingText.setText("Load training text...");
+        loadTrainingText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadTrainingTextActionPerformed(evt);
+            }
+        });
+        jMenu2.add(loadTrainingText);
 
         jMenuBar1.add(jMenu2);
 
@@ -241,6 +250,17 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_showDiagramActionPerformed
 
+    private void loadTrainingTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadTrainingTextActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try {
+            Textgen.bot.analyzeFile(chooser.getSelectedFile().getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_loadTrainingTextActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -285,14 +305,15 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JMenu jmTalk;
     private javax.swing.JMenuItem jmiNewConversation;
     private javax.swing.JMenuItem jmiQuit;
+    private javax.swing.JMenuItem loadTrainingText;
     private javax.swing.JScrollPane scrollPaneChat;
     private javax.swing.JMenuItem showBotStats;
     private javax.swing.JMenuItem showDiagram;

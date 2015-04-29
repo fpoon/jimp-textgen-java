@@ -9,6 +9,7 @@
  */
 package me.fpoon.textgen.gui.components;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import me.fpoon.textgen.bot.Bot;
@@ -47,17 +49,27 @@ public class DiagramPanel extends JPanel {
             child = b;
         }
         
+        public boolean isActive() {
+            return parent.isActive() && child.isActive();
+        }
+        
         public void draw(Graphics2D g) {
-            int x, y, x1, y1;
+            int x, y, x1, y1, x2, y2;
             x = parent.getBounds().x + parent.getBounds().width;
             y = parent.getBounds().y + parent.getBounds().height/2;
-            x1 = child.getBounds().x;
-            y1 = child.getBounds().y + child.getBounds().height/2;
-            if (parent.isActive() && child.isActive())
+            x2 = child.getBounds().x;
+            y2 = child.getBounds().y + child.getBounds().height/2;
+            x1 = (x2-x)/2 + x;
+            y1 = y;
+            if (parent.isActive() && child.isActive()) {
+                g.setStroke(new BasicStroke(3));
                 g.setColor(Color.darkGray);
-            else
+            } else
                 g.setColor(Color.gray);
             g.drawLine(x, y, x1, y1);
+            g.drawLine(x1, y1, x1, y2);
+            g.drawLine(x1, y2, x2, y2);
+            g.setStroke(new BasicStroke(1));
         }
     }
     
@@ -101,16 +113,18 @@ public class DiagramPanel extends JPanel {
         width = bubble.getX()+bubble.getWidth();
         width = getWidth() > width ? getWidth() : width;
         height = bubble.getY()+bubble.getHeight();
-        height = getHeight() > width ? getHeight() : height;
+        height = this.getPreferredSize().height > height ? this.getPreferredSize().height : height;
         this.setPreferredSize(new Dimension(width, height));
         
         return bubble;
     }
     
     public void displayOutput(String output, Bot bot) {
-        if (output == null) return;
         removeAll();
         arrows.clear();
+        //setPreferredSize(new Dimension(0,0));
+        if (output == null) return;
+
         String [] words = output.split(" ");
         
         DiagramBubble parent = null;
@@ -142,7 +156,15 @@ public class DiagramPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        List<Arrow> selected = new LinkedList<>();
         for (Arrow arrow : arrows) {
+            if (arrow.isActive())
+                selected.add(arrow);
+            else
+                arrow.draw(g2d);
+        }
+        
+        for (Arrow arrow : selected) {
             arrow.draw(g2d);
         }
         g2d.dispose();

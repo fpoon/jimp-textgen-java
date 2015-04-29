@@ -65,10 +65,15 @@
                 <Property name="text" type="java.lang.String" value="New Bot..."/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="loadTrainingText">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Bot Settings"/>
+                <Property name="text" type="java.lang.String" value="Load training text..."/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadTrainingTextActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

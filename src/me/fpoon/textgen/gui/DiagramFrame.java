@@ -42,6 +42,8 @@ public class DiagramFrame extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(64000, 64000));
+
         javax.swing.GroupLayout diagramPanelLayout = new javax.swing.GroupLayout(diagramPanel);
         diagramPanel.setLayout(diagramPanelLayout);
         diagramPanelLayout.setHorizontalGroup(
