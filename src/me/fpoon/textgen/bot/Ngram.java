@@ -65,6 +65,18 @@ public class Ngram {
         this.suffixes = new ArrayList<>();
     }
     
+    public List<String> getPrefixes() {
+        return prefixes;
+    }
+    
+    public List<Word> getSuffixes() {
+        return suffixes;
+    }
+    
+    public int getInstances() {
+        return instances;
+    }
+    
     /**
      * Inkrementuje ilość wystąpień danego ngramu
      */

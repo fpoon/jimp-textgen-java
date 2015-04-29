@@ -32,6 +32,10 @@ public class Bot {
         rand = new Random();
     }
     
+    public int getLength() {
+        return length;
+    }
+    
     /**
      * Analizuje tekst trenigowy z ustawionym domyślnie kodowaniem znaków
      * @param path         Ścieżka dostępu do tekstu treningowego
@@ -61,7 +65,7 @@ public class Bot {
         String[] parts = text.split("\\s");
         int i = 0, a = 0;
         for (String str : parts) {
-            if (str == null)
+            if (str == null || str.length() == 0)
                 continue;
             add(str);
             if (i < length)
@@ -105,7 +109,7 @@ public class Bot {
             suffix = ngram.getSuffix(rand.nextFloat());
             ret += suffix + " ";
             ngram = nextNgram(ngram, suffix);
-            System.out.println(ngram);
+            //System.out.println(ngram);
         }
         return ret;
     }
@@ -131,6 +135,21 @@ public class Bot {
         }
         else
             ngrams.add(ngram);
+    }
+    
+    /**
+     * Znajduje n-gram na podstawie tablicy słów
+     * @param words Tablica słow w chodzących w skład n-gramu
+     * @return      Znaleziony n-gram lub null jeśli ngramu brak
+     */
+    public Ngram getNgram(String words[]) {
+        Ngram foo = new Ngram(this.length);
+        for (String str : words) {
+            foo.add(str);
+        }
+        int index = ngrams.indexOf(foo);
+        if (index < 0) return null;
+        return ngrams.get(index);
     }
     
     /**

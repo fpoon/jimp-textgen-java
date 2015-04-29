@@ -55,6 +55,7 @@ public class MainForm extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("jimp-textgen-java");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
@@ -178,6 +179,9 @@ public class MainForm extends javax.swing.JFrame {
         chatPanel.addMessage(msg, null);
         Textgen.bot.analyze(msg);
         rsp = Textgen.bot.generate(10);
+        if (rsp.length() == 0)
+            rsp = "...";
+        Textgen.visualWnd.diagramPanel.displayOutput(rsp, Textgen.bot);
         taMessage.setText("");
         chatPanel.addMessage(rsp, Textgen.bot);
         taMessage.requestFocus();

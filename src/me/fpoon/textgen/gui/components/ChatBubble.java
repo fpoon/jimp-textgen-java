@@ -26,7 +26,7 @@ import me.fpoon.textgen.bot.Bot;
  *
  * @author mariusz
  */
-public class Bubble extends JPanel {
+public class ChatBubble extends JPanel {
     public static final int GAP = 10;
     public static final int RADIUS = 10;
     public static final int TAIL   = 10;
@@ -37,11 +37,11 @@ public class Bubble extends JPanel {
     Color[] humanColors = {Color.white, new Color(139, 224, 48)};
     boolean isBot = false;
     
-    public Bubble() {
+    public ChatBubble() {
         this("Masz wiadomość!", null);
     }
     
-    public Bubble(String msg, Object sender) {
+    public ChatBubble(String msg, Object sender) {
         super();
         if (sender instanceof Bot)
             isBot = true;

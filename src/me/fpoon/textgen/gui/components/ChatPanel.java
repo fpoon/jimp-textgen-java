@@ -50,6 +50,7 @@ public class ChatPanel extends JPanel {
     public final void resetBubbles() {
         this.removeAll();
         panels = new ArrayList<>();
+        this.setPreferredSize(new Dimension(0,0));
         this.revalidate();
     }
     
@@ -66,12 +67,9 @@ public class ChatPanel extends JPanel {
         if (sender instanceof Bot)
             System.out.print("<bot> ");
         System.out.println(msg);
-        Bubble bubble = new Bubble();
+        ChatBubble bubble = new ChatBubble(msg, sender);
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-       // bubble.setBounds(0,0,10,10);
-        bubble.setString(msg);
-        bubble.updateSize();
         if (sender instanceof Bot)
             panel.add(bubble, BorderLayout.CENTER);
         else
@@ -89,7 +87,7 @@ public class ChatPanel extends JPanel {
         width = getWidth();
         int y = 0;
         for (JPanel panel : panels) {
-            Bubble bubble = (Bubble)panel.getComponent(0);
+            ChatBubble bubble = (ChatBubble)panel.getComponent(0);
             bubble.updateSize();
             panel.setBounds(0, y, getWidth(), bubble.getHeight());
             y += bubble.getHeight();  
