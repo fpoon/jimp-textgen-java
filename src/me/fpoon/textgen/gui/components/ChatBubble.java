@@ -27,8 +27,20 @@ import me.fpoon.textgen.bot.Bot;
  * @author mariusz
  */
 public class ChatBubble extends JPanel {
+
+    /**
+     *
+     */
     public static final int GAP = 10;
+
+    /**
+     *
+     */
     public static final int RADIUS = 10;
+
+    /**
+     *
+     */
     public static final int TAIL   = 10;
     String message = "Masz wiadomość!";
     Paint fill;
@@ -37,10 +49,18 @@ public class ChatBubble extends JPanel {
     Color[] humanColors = {Color.white, new Color(139, 224, 48)};
     boolean isBot = false;
     
+    /**
+     *
+     */
     public ChatBubble() {
         this("Masz wiadomość!", null);
     }
     
+    /**
+     *
+     * @param msg
+     * @param sender
+     */
     public ChatBubble(String msg, Object sender) {
         super();
         if (sender instanceof Bot)
@@ -49,6 +69,10 @@ public class ChatBubble extends JPanel {
         setBkg(sender);
     }
     
+    /**
+     *
+     * @param sender
+     */
     public void setBkg(Object sender) {
         Point2D start = new Point2D.Float(0,0);
         Point2D end   = new Point2D.Float(0,10);
@@ -58,6 +82,10 @@ public class ChatBubble extends JPanel {
             fill = new LinearGradientPaint(start, end, colDist, humanColors);
     }
     
+    /**
+     *
+     * @param str
+     */
     public void setString(String str) {
         message = str;
         updateSize();

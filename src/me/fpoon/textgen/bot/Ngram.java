@@ -9,26 +9,44 @@
  */
 package me.fpoon.textgen.bot;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Klasa ngramu
  * @author mariusz
  */
-public class Ngram {
+public class Ngram implements Serializable{
     /**
      * Klasa słowa
      * @author mariusz
      */
-    public static class Word {
+    public static class Word implements Serializable{
+
+        /**
+         *
+         */
         public String word;
+
+        /**
+         *
+         */
         public int instances;
         
+        /**
+         *
+         * @param word
+         * @param instances
+         */
         public Word(String word, int instances) {
             this.word = word;
             this.instances = instances;
         }
         
+        /**
+         *
+         * @param word
+         */
         public Word(String word) {
             this(word,1);
         }
@@ -57,6 +75,10 @@ public class Ngram {
     int size;
     int instances;
     
+    /**
+     *
+     * @param length
+     */
     public Ngram(int length) {
         this.length = length;
         this.size = 0;
@@ -65,14 +87,26 @@ public class Ngram {
         this.suffixes = new ArrayList<>();
     }
     
+    /**
+     *
+     * @return
+     */
     public List<String> getPrefixes() {
         return prefixes;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<Word> getSuffixes() {
         return suffixes;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getInstances() {
         return instances;
     }

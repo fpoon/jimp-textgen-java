@@ -10,6 +10,7 @@
 package me.fpoon.textgen.bot;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,12 +20,17 @@ import java.util.*;
  * Klasa bota - generatora łańcuchów markowa.
  * @author mariusz
  */
-public class Bot {
+public class Bot implements Serializable{
     Set<String> words;
     List<Ngram> ngrams;
     Random rand;
     int length;
+    int totalWords;
     
+    /**
+     *
+     * @param length
+     */
     public Bot(int length) {
         this.length = length;
         words = new LinkedHashSet<>();
@@ -32,8 +38,24 @@ public class Bot {
         rand = new Random();
     }
     
+    /**
+     *
+     * @return
+     */
     public int getLength() {
         return length;
+    }
+    
+    public int getTotalWords() {
+        return totalWords;
+    }
+    
+    public int getUniqueWords() {
+        return words.size();
+    }
+    
+    public int getNgramsNumber() {
+        return ngrams.size();
     }
     
     /**
@@ -56,6 +78,22 @@ public class Bot {
     }
     
     /**
+     *
+     * @param str
+     * @return
+     */
+    public String deformatString(String str) {
+        String ret = "", foo = str.trim().toLowerCase();
+        for (char c : foo.toCharArray()) {
+            if (Character.getType(c) == Character.LOWERCASE_LETTER)
+                ret += c;
+            if (Character.getType(c) == Character.DECIMAL_DIGIT_NUMBER)
+                ret += c;
+        }
+        return ret;
+    }
+    
+    /**
      * Analizuje podany łańcuch znaków
      * @param text Łańcuch do analizy
      */
@@ -65,7 +103,10 @@ public class Bot {
         String[] parts = text.split("\\s");
         int i = 0, a = 0;
         for (String str : parts) {
-            if (str == null || str.length() == 0)
+            if (str == null)
+                continue;
+            str = deformatString(str);
+            if (str.length() == 0)
                 continue;
             add(str);
             if (i < length)
@@ -84,6 +125,7 @@ public class Bot {
                 
             }
             i++;
+            totalWords++;
             if ((i%10000) == 0)
                 System.out.println("Przeanalizowano "+i+" słów");
         }

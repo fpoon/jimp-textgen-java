@@ -24,7 +24,14 @@ import me.fpoon.textgen.gui.DiagramFrame;
  */
 public class Textgen {
     
+    /**
+     *
+     */
     public static Bot bot;
+
+    /**
+     *
+     */
     public static DiagramFrame visualWnd;
     /**
      * @param args the command line arguments

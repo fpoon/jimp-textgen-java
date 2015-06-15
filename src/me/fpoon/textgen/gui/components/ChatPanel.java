@@ -31,8 +31,15 @@ import me.fpoon.textgen.bot.Bot;
 public class ChatPanel extends JPanel {
     int totalLength = 0;
     int width;
+
+    /**
+     *
+     */
     public List<JPanel> panels;
     
+    /**
+     *
+     */
     public ChatPanel() {
         super();
         //setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -47,6 +54,9 @@ public class ChatPanel extends JPanel {
         refresh();
     }
     
+    /**
+     *
+     */
     public final void resetBubbles() {
         this.removeAll();
         panels = new ArrayList<>();
@@ -54,6 +64,9 @@ public class ChatPanel extends JPanel {
         this.revalidate();
     }
     
+    /**
+     *
+     */
     public void grow() {
         setPreferredSize(new Dimension(0,totalLength));
         JScrollPane pane = (JScrollPane)SwingUtilities.getAncestorOfClass(JScrollPane.class, this);
@@ -63,6 +76,11 @@ public class ChatPanel extends JPanel {
         
     }
     
+    /**
+     *
+     * @param msg
+     * @param sender
+     */
     public void addMessage(String msg, Object sender) {
         if (sender instanceof Bot)
             System.out.print("<bot> ");
@@ -83,6 +101,9 @@ public class ChatPanel extends JPanel {
         //refresh();
     }
     
+    /**
+     *
+     */
     public void refresh() {
         width = getWidth();
         int y = 0;
@@ -95,5 +116,11 @@ public class ChatPanel extends JPanel {
         totalLength = y;
         grow();
         this.revalidate();
+    }
+    
+    public void clear() {
+        resetBubbles();
+        refresh();
+        this.repaint();
     }
 }

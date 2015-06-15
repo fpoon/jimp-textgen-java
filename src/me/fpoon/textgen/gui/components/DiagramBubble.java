@@ -17,14 +17,17 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JPanel;
+import static me.fpoon.textgen.gui.components.DiagramPanel.ARROW_WIDTH;
+import static me.fpoon.textgen.gui.components.DiagramPanel.GAP;
 
 /**
  *
  * @author mariusz
  */
-public class DiagramBubble extends JPanel {
+public class DiagramBubble extends JPanel implements Comparable{
 
     static final Color[] BKG_ACTIVE = {Color.white, new Color(122, 196, 225)};
     static final Color[] BKG_INACTIVE = {Color.white, new Color(255, 211, 125)};
@@ -41,6 +44,11 @@ public class DiagramBubble extends JPanel {
     boolean active;
     int childWidth;
 
+    /**
+     *
+     * @param s
+     * @param parent
+     */
     public DiagramBubble(String s, DiagramBubble parent) {
         super();
         text = s;
@@ -51,19 +59,51 @@ public class DiagramBubble extends JPanel {
         setOpaque(false);
         setExtra(null);
     }
+    
+    /**
+     *
+     */
+    public void place() {
+        int x = parent.getBounds().x + parent.getBounds().width + ARROW_WIDTH;
+        int y = parent.getBounds().y + (parent.getBounds().height + GAP)*parent.indexOf(this);
+        setBounds(x, y, getWidth(), getHeight());
+    }
 
+    /**
+     *
+     * @param s
+     */
     public void setExtra(String s) {
         extra = s;
     }
+    
+    /**
+     *
+     * @return
+     */
+    public String getExtra() {
+        return extra;
+    }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void add(DiagramBubble b) {
         children.add(b);
     }
 
+    /**
+     *
+     */
     public void resizeChildren() {
         childWidth = 0;
         for (DiagramBubble child : children) {
@@ -75,16 +115,36 @@ public class DiagramBubble extends JPanel {
         for (DiagramBubble child : children) {
             child.setBounds(child.getX(), child.getY(), childWidth, child.getHeight());
         }
+        
+        Collections.sort(children);
+        for (DiagramBubble child : children) {
+            child.place();
+        }
+        
     }
 
+    /**
+     *
+     * @return
+     */
     public int getChildWidth() {
         return childWidth;
     }
 
+    /**
+     *
+     * @param b
+     * @return
+     */
     public int indexOf(DiagramBubble b) {
         return children.indexOf(b);
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public int indexOf(String s) {
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).getText().equals(s)) {
@@ -94,6 +154,11 @@ public class DiagramBubble extends JPanel {
         return -1;
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public DiagramBubble get(String str) {
         int index = indexOf(str);
         if (index < 0) {
@@ -102,6 +167,11 @@ public class DiagramBubble extends JPanel {
         return children.get(index);
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public boolean contains(String str) {
         for (DiagramBubble bubble : children) {
             if (bubble.getText().equals(bubble)) {
@@ -111,6 +181,10 @@ public class DiagramBubble extends JPanel {
         return false;
     }
 
+    /**
+     *
+     * @param a
+     */
     public void activate(boolean a) {
         Point2D start = new Point2D.Float(0, 0);
         Point2D end = new Point2D.Float(0, 10);
@@ -124,6 +198,10 @@ public class DiagramBubble extends JPanel {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isActive() {
         return active;
     }
@@ -140,6 +218,12 @@ public class DiagramBubble extends JPanel {
         //g.drawString(text, x, y - 1);
     }
 
+    /**
+     *
+     * @param width
+     * @param height
+     * @param g
+     */
     public void drawBubble(int width, int height, Graphics2D g) {
         int radius = getHeight();
         int strHeight = g.getFontMetrics().getHeight();
@@ -190,5 +274,20 @@ public class DiagramBubble extends JPanel {
         }
 
         g2d.dispose();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        DiagramBubble b = (DiagramBubble) o;
+        int ret;
+        try {
+            float foo = Float.parseFloat(extra.replaceAll("[^0-9]", ""));
+            float bar = Float.parseFloat(b.getExtra().replaceAll("[^0-9]", ""));
+            ret =  foo < bar ? 1 : -1;
+        } catch (Exception e) {
+            System.out.println("Błąd konwersji na flołty, sortowanie stringa");
+            return b.getExtra().compareTo(extra);
+        }
+        return ret;
     }
 }

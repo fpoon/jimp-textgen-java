@@ -9,13 +9,20 @@
  */
 package me.fpoon.textgen.gui;
 
-import com.sun.glass.events.KeyEvent;
+import java.awt.Button;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
-import java.awt.event.WindowEvent;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Enumeration;
+import javax.swing.AbstractButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import me.fpoon.textgen.Textgen;
+import me.fpoon.textgen.bot.Bot;
 
 /**
  *
@@ -39,6 +46,7 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         taMessage = new javax.swing.JTextArea();
@@ -48,15 +56,22 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jmTalk = new javax.swing.JMenu();
         jmiNewConversation = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jmiQuit = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         showDiagram = new javax.swing.JMenuItem();
         showBotStats = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jmiNewBot = new javax.swing.JMenuItem();
+        jmiLoadBot = new javax.swing.JMenuItem();
+        jmiSaveBot = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenu3 = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem4 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem5 = new javax.swing.JRadioButtonMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         loadTrainingText = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
@@ -125,14 +140,21 @@ public class MainForm extends javax.swing.JFrame {
 
         jmiNewConversation.setText("New Conversation");
         jmiNewConversation.setName(""); // NOI18N
+        jmiNewConversation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiNewConversationActionPerformed(evt);
+            }
+        });
         jmTalk.add(jmiNewConversation);
-
-        jMenuItem5.setText("Settings...");
-        jmTalk.add(jMenuItem5);
         jmTalk.add(jSeparator1);
 
         jmiQuit.setText("Quit");
         jmiQuit.setName(""); // NOI18N
+        jmiQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiQuitActionPerformed(evt);
+            }
+        });
         jmTalk.add(jmiQuit);
 
         jMenuBar1.add(jmTalk);
@@ -148,17 +170,66 @@ public class MainForm extends javax.swing.JFrame {
         viewMenu.add(showDiagram);
 
         showBotStats.setText("Show Bot Statistics");
+        showBotStats.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showBotStatsActionPerformed(evt);
+            }
+        });
         viewMenu.add(showBotStats);
 
         jMenuBar1.add(viewMenu);
 
         jMenu2.setText("Bot");
 
-        jMenuItem1.setText("Load Bot...");
-        jMenu2.add(jMenuItem1);
+        jmiNewBot.setText("New Bot");
+        jmiNewBot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiNewBotActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmiNewBot);
 
-        jMenuItem2.setText("New Bot...");
-        jMenu2.add(jMenuItem2);
+        jmiLoadBot.setText("Load Bot...");
+        jmiLoadBot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLoadBotActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmiLoadBot);
+
+        jmiSaveBot.setText("Save Bot...");
+        jmiSaveBot.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiSaveBotActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmiSaveBot);
+        jMenu2.add(jSeparator3);
+
+        jMenu3.setText("N-gram size");
+
+        buttonGroup1.add(jRadioButtonMenuItem1);
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("2");
+        jMenu3.add(jRadioButtonMenuItem1);
+
+        buttonGroup1.add(jRadioButtonMenuItem2);
+        jRadioButtonMenuItem2.setText("3");
+        jMenu3.add(jRadioButtonMenuItem2);
+
+        buttonGroup1.add(jRadioButtonMenuItem3);
+        jRadioButtonMenuItem3.setText("4");
+        jMenu3.add(jRadioButtonMenuItem3);
+
+        buttonGroup1.add(jRadioButtonMenuItem4);
+        jRadioButtonMenuItem4.setText("5");
+        jMenu3.add(jRadioButtonMenuItem4);
+
+        buttonGroup1.add(jRadioButtonMenuItem5);
+        jRadioButtonMenuItem5.setText("6");
+        jMenu3.add(jRadioButtonMenuItem5);
+
+        jMenu2.add(jMenu3);
         jMenu2.add(jSeparator2);
 
         loadTrainingText.setText("Load training text...");
@@ -174,6 +245,11 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1.setText("Help");
 
         jMenuItem3.setText("About");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
 
         jMenuBar1.add(jMenu1);
@@ -211,10 +287,12 @@ public class MainForm extends javax.swing.JFrame {
         if (rsp.length() == 0) {
             rsp = "...";
             lastRsp = null;
-        } else
+        } else {
             lastRsp = rsp;
-        if (diagram != null)
+        }
+        if (diagram != null) {
             diagram.diagramPanel.displayOutput(rsp, Textgen.bot);
+        }
         taMessage.setText("");
         chatPanel.addMessage(rsp, Textgen.bot);
         taMessage.requestFocus();
@@ -231,7 +309,7 @@ public class MainForm extends javax.swing.JFrame {
     private void taMessageKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taMessageKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if ((evt.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
-                taMessage.setText(taMessage.getText()+"\n");
+                taMessage.setText(taMessage.getText() + "\n");
                 return;
             }
             btSendActionPerformed(null);
@@ -250,16 +328,116 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_showDiagramActionPerformed
 
+    private void setEnabledAllComponents(boolean f) {
+        Component[] components = this.getComponents();
+        for (Component compo : components) {
+            compo.setEnabled(f);
+        }
+    }
+
     private void loadTrainingTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadTrainingTextActionPerformed
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            Thread th = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Textgen.bot.analyzeFile(chooser.getSelectedFile().getPath());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            //this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            //this.setEnabledAllComponents(false);
+            th.start();
+            while (th.isAlive()) {
+                try {
+                    this.wait(1000);
+                } catch (Exception e) {
+
+                }
+            }
+            //this.setEnabledAllComponents(true);
+            //this.setCursor(Cursor.getDefaultCursor());
+
+            //this.setEnabled(true);
+        }
+    }//GEN-LAST:event_loadTrainingTextActionPerformed
+
+    private void showBotStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showBotStatsActionPerformed
+        if (stats == null || !stats.isDisplayable()) {
+            stats = new StatFrame();
+            stats.setVisible(true);
+        } else {
+            //stats.dispatchEvent(new WindowEvent(stats, WindowEvent.WINDOW_CLOSING));
+            stats.dispose();
+            stats = null;
+        }
+    }//GEN-LAST:event_showBotStatsActionPerformed
+
+    private void jmiQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiQuitActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jmiQuitActionPerformed
+
+    private void jmiNewConversationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNewConversationActionPerformed
+        chatPanel.clear();
+    }//GEN-LAST:event_jmiNewConversationActionPerformed
+
+    private void jmiNewBotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiNewBotActionPerformed
+        for (Enumeration<AbstractButton> buttons = buttonGroup1.getElements(); buttons.hasMoreElements();)
+        {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                int size = Integer.valueOf(button.getText());
+                Textgen.bot = new Bot(size);
+            }
+        }
+        chatPanel.clear();
+    }//GEN-LAST:event_jmiNewBotActionPerformed
+
+    private void jmiSaveBotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaveBotActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             try {
-            Textgen.bot.analyzeFile(chooser.getSelectedFile().getPath());
+                String path = chooser.getSelectedFile().getPath();
+                FileOutputStream fos = new FileOutputStream(path);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(Textgen.bot);
+                System.out.println("Zapisano "+path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }//GEN-LAST:event_loadTrainingTextActionPerformed
+    }//GEN-LAST:event_jmiSaveBotActionPerformed
+
+    private void jmiLoadBotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLoadBotActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            try {
+                String path = chooser.getSelectedFile().getPath();
+                FileInputStream fis = new FileInputStream(path);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                Textgen.bot = (Bot)ois.readObject();
+                System.out.println("Wczytano "+path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }//GEN-LAST:event_jmiLoadBotActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        if (about == null || !about.isDisplayable()) {
+            about = new AboutFrame();
+            about.setVisible(true);
+        } else {
+            //about.dispatchEvent(new WindowEvent(about, WindowEvent.WINDOW_CLOSING));
+            about.dispose();
+            about = null;
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,21 +476,29 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btSend;
+    private javax.swing.ButtonGroup buttonGroup1;
     private me.fpoon.textgen.gui.components.ChatPanel chatPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem4;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JMenu jmTalk;
+    private javax.swing.JMenuItem jmiLoadBot;
+    private javax.swing.JMenuItem jmiNewBot;
     private javax.swing.JMenuItem jmiNewConversation;
     private javax.swing.JMenuItem jmiQuit;
+    private javax.swing.JMenuItem jmiSaveBot;
     private javax.swing.JMenuItem loadTrainingText;
     private javax.swing.JScrollPane scrollPaneChat;
     private javax.swing.JMenuItem showBotStats;
@@ -321,6 +507,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu viewMenu;
     // End of variables declaration//GEN-END:variables
     private DiagramFrame diagram;
+    private StatFrame stats;
     private String lastRsp;
-
+    private AboutFrame about;
 }

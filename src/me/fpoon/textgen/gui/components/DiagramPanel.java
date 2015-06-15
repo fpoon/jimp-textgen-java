@@ -29,30 +29,62 @@ import me.fpoon.textgen.bot.Ngram.Word;
  * @author mariusz
  */
 public class DiagramPanel extends JPanel {
+
+    /**
+     *
+     */
     public static final int ARROW_WIDTH = 20;
+
+    /**
+     *
+     */
     public static final int GAP = 10;
     
+    /**
+     *
+     */
     public static class Arrow {
         DiagramBubble parent;
         DiagramBubble child;
         
+        /**
+         *
+         * @param parent
+         * @param child
+         */
         public Arrow(DiagramBubble parent, DiagramBubble child) {
             setParent(parent);
             setChild(child);
         }
         
+        /**
+         *
+         * @param b
+         */
         public void setParent(DiagramBubble b) {
             parent = b;
         }
         
+        /**
+         *
+         * @param b
+         */
         public void setChild(DiagramBubble b) {
             child = b;
         }
         
+        /**
+         *
+         * @return
+         */
         public boolean isActive() {
             return parent.isActive() && child.isActive();
         }
         
+        /**
+         *
+         * @param g
+         */
         public void draw(Graphics2D g) {
             int x, y, x1, y1, x2, y2;
             x = parent.getBounds().x + parent.getBounds().width;
@@ -76,6 +108,9 @@ public class DiagramPanel extends JPanel {
     List<DiagramBubble> bubbles;
     List<Arrow> arrows;
     
+    /**
+     *
+     */
     public DiagramPanel() {
         super();
         setBackground(Color.white);
@@ -83,10 +118,23 @@ public class DiagramPanel extends JPanel {
         arrows = new ArrayList<>();
     }
     
+    /**
+     *
+     * @param s
+     * @param parent
+     * @return
+     */
     public DiagramBubble addBubble(String s, DiagramBubble parent) {
         return addBubble(s, parent, null);
     }
     
+    /**
+     *
+     * @param s
+     * @param parent
+     * @param extra
+     * @return
+     */
     public DiagramBubble addBubble(String s, DiagramBubble parent, String extra) {
         DiagramBubble bubble = new DiagramBubble(s, parent);
         bubble.setExtra(extra);
@@ -119,6 +167,11 @@ public class DiagramPanel extends JPanel {
         return bubble;
     }
     
+    /**
+     *
+     * @param output
+     * @param bot
+     */
     public void displayOutput(String output, Bot bot) {
         removeAll();
         arrows.clear();
@@ -129,6 +182,7 @@ public class DiagramPanel extends JPanel {
         
         DiagramBubble parent = null;
         Ngram seed = bot.getNgram(words);
+        if (seed == null) return;
         for (String str : seed.getPrefixes()) {
                 parent = addBubble(str, parent, "seed");
                 parent.activate(true);
